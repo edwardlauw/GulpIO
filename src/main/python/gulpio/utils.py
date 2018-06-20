@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-import sh
+import subprocess
 import random
 import cv2
 import shutil
@@ -42,16 +42,18 @@ def burst_frames_to_shm(vid_path, temp_burst_dir, frame_rate=None):
     if not check_ffmpeg_exists():
         raise FFMPEGNotFound()
     try:
-        ffmpeg_args = [
+       ffmpeg_args = [
+            'ffmpeg',
+            '-loglevel', 'panic',
             '-i', vid_path,
             '-q:v', str(1),
             '-f', 'image2',
             target_mask,
         ]
         if frame_rate:
-            ffmpeg_args.insert(2, '-r')
-            ffmpeg_args.insert(3, frame_rate)
-        sh.ffmpeg(*ffmpeg_args)
+            ffmpeg_args.insert(5, '-r')
+            ffmpeg_args.insert(6, str(frame_rate))
+        subprocess.call(ffmpeg_args)
     except Exception as e:
         print(repr(e))
 
