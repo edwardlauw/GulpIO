@@ -42,7 +42,7 @@ def burst_frames_to_shm(vid_path, temp_burst_dir, frame_rate=None):
     if not check_ffmpeg_exists():
         raise FFMPEGNotFound()
     try:
-       ffmpeg_args = [
+        ffmpeg_args = [
             'ffmpeg',
             '-loglevel', 'panic',
             '-i', vid_path,
