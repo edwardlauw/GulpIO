@@ -35,6 +35,7 @@ def set_properties(project):
     project.depends_on('opencv-python')
     project.depends_on('docopt')
     project.depends_on('Pillow')
+    project.depends_on('subprocess')
     project.get_property('filter_resources_glob').extend(
         ['**/gulpio/__init__.py'])
     project.get_property('coverage_exceptions').extend(
