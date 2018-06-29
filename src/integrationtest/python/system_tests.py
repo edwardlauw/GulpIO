@@ -1,6 +1,6 @@
 import os
 import tempfile
-import sh
+import subprocess
 import json
 import atexit
 import shutil
@@ -59,14 +59,15 @@ with open(os.path.join(temp_dir, 'source'), 'wb') as source_frames:
         source_frames.write(b'\x00' * 30000)
         source_frames.write(b'\xff' * 30000)
 
-sh.ffmpeg('-t', '10',
+subprocess.call(['ffmpeg',
+          '-t', '10',
           '-s', '100x100',
           '-f', 'rawvideo',
           '-pix_fmt', 'rgb24',
           '-r', '8',
           '-i', './source',
-          'source.mp4',
-          _cwd=temp_dir,
+          'source.mp4'],
+          cwd=temp_dir,
           )
 
 json_content = []
@@ -86,11 +87,11 @@ with open(os.path.join(temp_dir, 'videos.json'), 'w') as fp:
 # step 2: run the gulping
 
 # PATH=src/main/scripts:$PATH PYTHONPATH=src/main/python
-command = sh.gulp_20bn_json_videos(
+command = subprocess.call(['gulp_20bn_json_videos',
     '--videos_per_chunk',  '10',
     os.path.join(temp_dir, 'videos.json'),
     temp_dir,
-    output_dir,
+    output_dir]
 )
 
 # step 3: sanity check the output
@@ -123,11 +124,11 @@ with open(os.path.join(temp_dir, 'videos_extend.json'), 'w') as fp:
 
 # step 6: extend the existing gulps
 
-command = sh.gulp_20bn_json_videos(
+command = subprocess.call(['gulp_20bn_json_videos',
     '--videos_per_chunk',  '10',
     os.path.join(temp_dir, 'videos_extend.json'),
     temp_dir,
-    output_dir,
+    output_dir]
 )
 
 # step 7: sanity check the extended output
